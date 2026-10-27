@@ -1,1 +1,94 @@
+#include <iostream>
+using namespace std;
+
+
+//  Complex Class
+//  OOP Concepts Used:
+//    - Encapsulation   : private data members with public getters
+//    - Constructors    : default & parameterized
+//    - Operator Overloading : +, -, <<
+
+class Complex {
+private:
+    // ---------- Encapsulated data members ----------
+    double real;
+    double imaginary;
+
+public:
+    // ---------- Constructors ----------
+
+    // Default constructor
+    Complex() : real(0.0), imaginary(0.0) {}
+
+    // Parameterized constructor
+    Complex(double r, double i) : real(r), imaginary(i) {}
+
+    // ---------- Getter methods (Encapsulation) ----------
+    double getReal() const      { return real; }
+    double getImaginary() const { return imaginary; }
+
+    // ---------- Operator Overloading ----------
+
+    // Overload '+' to add two Complex numbers
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real,
+                       imaginary + other.imaginary);
+    }
+
+    // Overload '-' to subtract two Complex numbers
+    Complex operator-(const Complex& other) const {
+        return Complex(real - other.real,
+                       imaginary - other.imaginary);
+    }
+
+    // Overload '<<' to display a Complex number
+    // Must be a friend because the left operand is ostream, not Complex
+    friend ostream& operator<<(ostream& out, const Complex& c);
+};
+
+// ---------- Friend function definition ----------
+ostream& operator<<(ostream& out, const Complex& c) {
+    out << c.real;
+
+    if (c.imaginary >= 0)
+        out << " + " << c.imaginary << "i";
+    else
+        out << " - " << -c.imaginary << "i";   // avoid "3 + -4i"
+
+    return out;
+}
+
+
+Complex readComplex(const string& label) {
+    double r, i;
+    cout << "Enter " << label << " complex number:\n";
+    cout << "  Real part      : ";
+    cin  >> r;
+    cout << "  Imaginary part : ";
+    cin  >> i;
+    return Complex(r, i);
+}
+
+int main() {
+
+
+    // Create two Complex objects using the parameterized constructor
+    Complex c1 = readComplex("first");
+    cout << endl;
+    Complex c2 = readComplex("second");
+
+    // Perform arithmetic using overloaded operators
+    Complex sum  = c1 + c2;   // overloaded '+'
+    Complex diff = c1 - c2;   // overloaded '-'
+
+    // Display results using overloaded '<<'
+    cout << "\n----------- RESULTS -----------\n";
+    cout << "  c1       = " << c1   << endl;
+    cout << "  c2       = " << c2   << endl;
+    cout << "  c1 + c2  = " << sum  << endl;
+    cout << "  c1 - c2  = " << diff << endl;
+    cout << "-------------------------------\n";
+
+    return 0;
+}
 
